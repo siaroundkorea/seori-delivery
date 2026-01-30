@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>🌙 서리배송 - 야밤에 과일 도둑</title>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --bg-night: #0a0a0f;
+      --bg-dark: #12121a;
+      --bg-card: #1a1a2e;
+      --bg-input: #252540;
+      --accent-gold: #ffd700;
+      --accent-moon: #f4e99b;
+      --accent-purple: #9d4edd;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0b0;
+      --text-muted: #606070;
+      --danger: #ff6b6b;
+      --success: #51cf66;
+    }
+    
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg-night);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* 별 배경 */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+    
+    /* 헤더 */
+    .header {
+      position: relative;
+      z-index: 10;
+      background: linear-gradient(180deg, var(--bg-card) 0%, transparent 100%);
+      padding: 30px 20px 40px;
+      text-align: center;
+    }
+    
+    .insta-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: var(--accent-moon);
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255, 215, 0, 0.1);
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .insta-icon:hover {
+      color: var(--accent-gold);
+      background: rgba(255, 215, 0, 0.25);
+      transform: scale(1.1);
+    }
+    
+    .moon {
+      font-size: 48px;
+      margin-bottom: 8px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    .brand {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 32px;
+      color: var(--accent-gold);
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+      margin-bottom: 4px;
+    }
+    
+    .tagline {
+      font-size: 14px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .tagline .mask {
+      font-size: 18px;
+    }
+    
+    /* 컨테이너 */
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 16px 100px;
+    }
+    
+    /* 섹션 */
+    .section {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 24px 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 215, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+      opacity: 0.5;
+    }
+    
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--accent-moon);
+    }
+    
+    .section-title .icon {
+      font-size: 24px;
+    }
+    
+    /* 목표물(과일) 그리드 */
+    .target-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .target-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--bg-input);
+      border: 2px solid transparent;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .target-item::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .target-item:hover::before {
+      left: 100%;
+    }
+    
+    .target-item:hover {
+      background: var(--bg-dark);
+      transform: scale(1.02);
+    }
+    
+    .target-item.selected {
+      border-color: var(--accent-gold);
+      background: rgba(255, 215, 0, 0.1);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    }
+    
+    .target-item .emoji {
+      font-size: 36px;
+      flex-shrink: 0;
+    }
+    
+    .target-item .info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .target-item .name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    
+    .unit {
+      display: block;
+      font-size: 0.8em;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    
+    .target-item.selected .name {
+      color: var(--accent-gold);
+    }
+    
+    .target-item .desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    /* 선택된 목표물 */
+    .loot-summary {
+      margin-top: 20px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(255, 215, 0, 0.1));
+      border-radius: 16px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      display: none;
+    }
+    
+    .loot-summary.active {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* 장바구니 스타일 */
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .cart-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+    
+    .cart-clear {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    
+    .cart-clear:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+    }
+    
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-input);
+      padding: 12px;
+      border-radius: 10px;
+    }
+    
+    .cart-item-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .cart-emoji {
+      font-size: 24px;
+    }
+    
+    .cart-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .qty-btn.small {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: none;
+      background: var(--bg-card);
+      color: var(--accent-gold);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .qty-btn.small:hover {
+      background: var(--accent-purple);
+      color: white;
+    }
+    
+    .cart-qty {
+      font-size: 14px;
+      font-weight: 600;
+      min-width: 24px;
+      text-align: center;
+      color: var(--text-primary);
+    }
+    
+    .cart-item-price {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-moon);
+      min-width: 70px;
+      text-align: right;
+    }
+    
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(255, 215, 0, 0.3);
+    }
+    
+    .cart-total span:first-child {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .total-price {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 22px;
+      color: var(--accent-gold);
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+    
+    /* 입력 필드 */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    
+    .form-label .required {
+      color: var(--danger);
+    }
+    
+    .form-label .hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 16px;
+      background: var(--bg-input);
+      border: 2px solid transparent;
+      border-radius: 14px;
+      color: var(--text-primary);
+      font-size: 15px;
+      transition: all 0.3s;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-purple);
+      background: var(--bg-dark);
+      box-shadow: 0 0 0 4px rgba(157, 78, 221, 0.2);
+    }
+    
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    textarea.form-input {
+      resize: none;
+      min-height: 90px;
+    }
+    
+    /* 제출 버튼 */
+    .submit-section {
+      padding: 20px;
+      background: transparent;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--accent-gold), #ffaa00);
+      border: none;
+      border-radius: 16px;
+      color: var(--bg-night);
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .submit-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+    }
+    
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+    
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .submit-btn.loading {
+      color: transparent;
+    }
+    
+    .submit-btn.loading::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 28px;
+      height: 28px;
+      margin: -14px 0 0 -14px;
+      border: 3px solid rgba(0, 0, 0, 0.2);
+      border-top-color: var(--bg-night);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* 과일 테스트 배너 */
+    .test-banner {
+      display: block;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+      border: 1px solid rgba(102, 126, 234, 0.3);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .test-banner:hover {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+    }
+    
+    .test-banner-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .test-icon {
+      font-size: 32px;
+    }
+    
+    .test-text {
+      flex: 1;
+    }
+    
+    .test-title {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    
+    .test-desc {
+      display: block;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    .test-arrow {
+      font-size: 20px;
+      color: rgba(102, 126, 234, 0.8);
+    }
+    
+    /* 안내 문구 */
+    .notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 16px;
+      background: rgba(157, 78, 221, 0.15);
+      border-radius: 12px;
+      border-left: 3px solid var(--accent-purple);
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 16px;
+    }
+    
+    .notice .icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    
+    /* 고정 주소 */
+    .fixed-address {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--bg-input), var(--bg-card));
+      border-radius: 14px;
+      border: 1px dashed var(--accent-gold);
+      color: var(--accent-moon);
+      font-size: 15px;
+      font-weight: 500;
+    }
+    
+    .fixed-address .address-icon {
+      font-size: 20px;
+    }
+    
+    /* 오늘의 서리 과일 배너 */
+    .today-banner {
+      display: block;
+      position: relative;
+      background: linear-gradient(135deg, #1a1a2e 0%, #2d1f3d 100%);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 16px;
+      text-decoration: none;
+      overflow: hidden;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .today-banner:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-gold);
+      box-shadow: 0 8px 30px rgba(255, 215, 0, 0.2);
+    }
+    
+    .banner-glow {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 60%);
+      animation: bannerPulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes bannerPulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+    
+    .banner-content {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .banner-icon {
+      font-size: 40px;
+      animation: fruitBounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes fruitBounce {
+      0%, 100% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+    }
+    
+    .banner-text {
+      flex: 1;
+    }
+    
+    .banner-title {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 18px;
+      color: var(--accent-gold);
+      margin-bottom: 2px;
+    }
+    
+    .banner-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .banner-arrow {
+      font-size: 24px;
+      color: var(--accent-gold);
+      animation: arrowMove 1s ease-in-out infinite;
+    }
+    
+    @keyframes arrowMove {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(5px); }
+    }
+    
+    /* 모달 */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: var(--bg-card);
+      border-radius: 24px;
+      padding: 32px 24px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
+      animation: modalPop 0.4s ease;
+      margin: auto;
+      flex-shrink: 0;
+    }
+    
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .modal-icon {
+      font-size: 72px;
+      margin-bottom: 16px;
+      animation: bounce 0.6s ease;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .modal-title {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 28px;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+    
+    .modal-message {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    
+    .modal-order-id {
+      background: var(--bg-input);
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      font-family: monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-moon);
+      letter-spacing: 1px;
+    }
+    
+    .modal-order-id span {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 4px;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    
+    /* 주문 정보 요약 */
+    .order-summary {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+      text-align: left;
+    }
+    
+    .order-summary-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-moon);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    
+    .modal-order-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    
+    .modal-order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--bg-input);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+    
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px dashed var(--bg-input);
+    }
+    
+    .order-total span:first-child {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .order-price {
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 22px;
+      color: var(--accent-gold);
+    }
+    
+    .modal-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--accent-purple);
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .modal-btn:hover {
+      background: #b366e8;
+    }
+    
+    /* 결제 섹션 */
+    .payment-section {
+      background: var(--bg-input);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: left;
+    }
+    
+    .payment-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .payment-method {
+      margin-bottom: 12px;
+    }
+    
+    .payment-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    
+    .payment-icon {
+      font-size: 16px;
+    }
+    
+    .payment-account {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      padding: 14px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+    
+    .payment-account:hover {
+      border-color: var(--accent-gold);
+    }
+    
+    .payment-account:active {
+      transform: scale(0.98);
+    }
+    
+    #accountNumber {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-family: monospace;
+      letter-spacing: 1px;
+    }
+    
+    .copy-btn {
+      font-size: 12px;
+      color: var(--accent-teal);
+      background: rgba(0, 217, 192, 0.15);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    
+    .payment-divider {
+      display: flex;
+      align-items: center;
+      margin: 16px 0;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    
+    .payment-divider::before,
+    .payment-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--bg-card);
+    }
+    
+    .payment-divider span {
+      padding: 0 12px;
+    }
+    
+    .kakaopay-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.2s;
+      background: #fee500;
+      color: #191919;
+    }
+    
+    .kakaopay-btn:hover {
+      background: #fada0a;
+      transform: translateY(-2px);
+    }
+    
+    .kakaopay-btn:active {
+      transform: translateY(0);
+    }
+    
+    .pay-icon {
+      font-size: 20px;
+    }
+    
+    .payment-notice {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+    /* 푸터 */
+    .footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    
+    .footer .warning {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+    
+    /* 홈 화면 추가 가이드 */
+    .install-guide {
+      position: relative;
+      z-index: 10;
+      max-width: 480px;
+      margin: 0 auto 20px;
+      padding: 0 16px;
+    }
+    
+    .install-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      padding: 16px 20px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid rgba(255, 215, 0, 0.1);
+    }
+    
+    .install-header:hover {
+      border-color: rgba(255, 215, 0, 0.3);
+    }
+    
+    .install-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--accent-moon);
+    }
+    
+    .install-icon {
+      font-size: 20px;
+    }
+    
+    .install-arrow {
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: transform 0.3s;
+    }
+    
+    .install-arrow.open {
+      transform: rotate(180deg);
+    }
+    
+    .install-content {
+      display: none;
+      background: var(--bg-secondary);
+      margin-top: 8px;
+      padding: 20px;
+      border-radius: 16px;
+      animation: slideDown 0.3s ease;
+    }
+    
+    .install-content.open {
+      display: block;
+    }
+    
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .install-desc {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    
+    .install-method {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    
+    .install-method:last-of-type {
+      margin-bottom: 0;
+    }
+    
+    .method-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    
+    .method-badge.iphone {
+      background: linear-gradient(135deg, #5856d6, #007aff);
+      color: white;
+    }
+    
+    .method-badge.android {
+      background: linear-gradient(135deg, #34a853, #0f9d58);
+      color: white;
+    }
+    
+    .method-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    
+    .step-num {
+      width: 24px;
+      height: 24px;
+      background: var(--accent-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--bg-night);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-content strong {
+      color: var(--text-primary);
+      font-size: 14px;
+    }
+    
+    .step-detail {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    
+    .step-detail strong {
+      color: var(--accent-moon);
+      font-size: 12px;
+    }
+    
+    .icon-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--bg-card);
+      border-radius: 6px;
+      font-size: 12px;
+      vertical-align: middle;
+      margin-right: 2px;
+    }
+    
+    /* 링크 복사 박스 */
+    .copy-link-box {
+      margin-top: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(255, 215, 0, 0.1));
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .copy-link-box p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    
+    .copy-link-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1px dashed var(--accent-gold);
+      border-radius: 10px;
+      color: var(--accent-moon);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .copy-link-btn:hover {
+      background: rgba(255, 215, 0, 0.1);
+    }
+    
+    .copy-link-btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 별 배경 -->
+  <div class="stars" id="stars"></div>
+
+  <!-- 헤더 -->
+  <div class="header">
+    <a href="https://www.instagram.com/fruitthie_f/" target="_blank" class="insta-icon" title="인스타그램">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+    </a>
+    <div class="moon">🌙</div>
+    <div class="brand">서리배송</div>
+    <div class="tagline">
+      <span class="mask">🥷</span>
+      <span>야밤에 과일 도둑</span>
+      <span class="mask">🥷</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <form id="orderForm">
+      
+      <!-- 오늘의 서리 과일 배너 -->
+      <a href="https://www.instagram.com/fruitthie_f/" target="_blank" class="today-banner">
+        <div class="banner-glow"></div>
+        <div class="banner-content">
+          <span class="banner-icon">🍎</span>
+          <div class="banner-text">
+            <div class="banner-title">오늘의 서리 과일</div>
+            <div class="banner-sub">인스타그램에서 확인하세요!</div>
+          </div>
+          <span class="banner-arrow">→</span>
+        </div>
+      </a>
+      
+      <!-- 오늘 과일 테스트 배너 -->
+      <a href="https://sage-boba-660e9a.netlify.app" target="_blank" class="test-banner">
+        <div class="test-banner-content">
+          <span class="test-icon">🧪</span>
+          <div class="test-text">
+            <span class="test-title">오늘 나한테 필요한 과일은?</span>
+            <span class="test-desc">12개 질문으로 알아보는 과일 처방전</span>
+          </div>
+          <span class="test-arrow">→</span>
+        </div>
+      </a>
+      
+      <!-- 서리과일 선택 -->
+      <div class="section">
+        <div class="section-title">
+          <span class="icon">🍑</span>
+          <span>서리과일 선택</span>
+        </div>
+        
+        <div class="target-grid" id="targetGrid"></div>
+        
+        <div class="loot-summary" id="lootSummary">
+          <div class="cart-header">
+            <span class="cart-title">🛒 서리 목록</span>
+            <button type="button" class="cart-clear" onclick="clearCart()">비우기</button>
+          </div>
+          <div class="cart-items" id="cartItems">
+            <!-- 장바구니 아이템들이 여기에 렌더링 됨 -->
+          </div>
+          <div class="cart-total">
+            <span>총 금액</span>
+            <span class="total-price" id="totalPrice">0원</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 꽁범 정보 -->
+      <div class="section">
+        <div class="section-title">
+          <span class="icon">🤝</span>
+          <span>꽁범 정보</span>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">
+            꽁범명 <span class="required">*</span>
+            <span class="hint">실명 or 코드네임</span>
+          </label>
+          <input type="text" class="form-input" id="name" placeholder="ex) 과일애호가, 딸기도둑2호" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">
+            비상연락망 <span class="required">*</span>
+            <span class="hint">전리품 도착 알림용</span>
+          </label>
+          <input type="tel" class="form-input" id="phone" placeholder="010-0000-0000" required>
+        </div>
+      </div>
+      
+      <!-- 아지트 정보 -->
+      <div class="section">
+        <div class="section-title">
+          <span class="icon">🏠</span>
+          <span>전리품 수령 위치</span>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">기본 주소</label>
+          <div class="fixed-address">
+            <span class="address-icon">📍</span>
+            <span>대전 한빛아파트</span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">
+            동 / 호수 <span class="required">*</span>
+          </label>
+          <input type="text" class="form-input" id="addressDetail" placeholder="ex) 101동 202호" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">
+            작전 지시사항
+            <span class="hint">배송기사에게 전달</span>
+          </label>
+          <textarea class="form-input" id="request" placeholder="ex) 문 앞에 슬쩍, 초인종 금지, 경비실 맡김..."></textarea>
+        </div>
+        
+        <div class="notice">
+          <span class="icon">🤫</span>
+          <span>모든 서리 작전은 야밤에 몰래 진행됩니다. 꽁범님 문 앞에 전리품이 슬쩍 도착해요!</span>
+        </div>
+      </div>
+      
+      <!-- 제출 -->
+      <div class="submit-section">
+        <button type="submit" class="submit-btn" id="submitBtn">
+          🌙 서리 작전 개시
+        </button>
+      </div>
+      
+    </form>
+  </div>
+  
+  <!-- 홈 화면 추가 가이드 -->
+  <div class="install-guide">
+    <div class="install-header" onclick="toggleInstallGuide()">
+      <div class="install-title">
+        <span class="install-icon">📲</span>
+        <span>앱처럼 사용하기</span>
+      </div>
+      <span class="install-arrow" id="installArrow">▼</span>
+    </div>
+    <div class="install-content" id="installContent">
+      <p class="install-desc">홈 화면에 추가하면 앱처럼 바로 접속할 수 있어요!</p>
+      
+      <!-- iPhone 가이드 -->
+      <div class="install-method">
+        <div class="method-badge iphone">iPhone (Safari)</div>
+        <div class="method-steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Safari로 이 페이지 열기</strong>
+              <p class="step-detail">⚠️ 카카오톡/인스타 내 브라우저 말고<br>반드시 <strong>Safari 앱</strong>에서 열어야 해요!</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>공유 버튼 누르기</strong>
+              <p class="step-detail">화면 <strong>하단 중앙</strong>에 있는<br>
+              <span class="icon-box">⬆️</span> 네모에서 화살표 나가는 아이콘</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <strong>홈 화면에 추가 찾기</strong>
+              <p class="step-detail">공유 메뉴에서 <strong>아래로 스크롤</strong>해서<br>
+              <span class="icon-box">➕</span> <strong>"홈 화면에 추가"</strong> 선택</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              <strong>추가 버튼 누르기</strong>
+              <p class="step-detail">우측 상단의 <strong>"추가"</strong> 버튼 탭!<br>
+              🎉 홈 화면에 아이콘이 생겼어요!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Android 가이드 -->
+      <div class="install-method">
+        <div class="method-badge android">Android (Chrome)</div>
+        <div class="method-steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <div class="step-content">
+              <strong>Chrome으로 이 페이지 열기</strong>
+              <p class="step-detail">⚠️ 카카오톡/인스타 내 브라우저 말고<br>반드시 <strong>Chrome 앱</strong>에서 열어야 해요!</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <div class="step-content">
+              <strong>메뉴 버튼 누르기</strong>
+              <p class="step-detail">화면 <strong>우측 상단</strong>에 있는<br>
+              <span class="icon-box">⋮</span> 점 세개 아이콘</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <div class="step-content">
+              <strong>홈 화면에 추가 선택</strong>
+              <p class="step-detail">메뉴에서<br>
+              <span class="icon-box">📱</span> <strong>"홈 화면에 추가"</strong> 탭</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">4</span>
+            <div class="step-content">
+              <strong>추가 버튼 누르기</strong>
+              <p class="step-detail"><strong>"추가"</strong> 또는 <strong>"자동으로 추가"</strong> 선택<br>
+              🎉 홈 화면에 아이콘이 생겼어요!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 링크 복사 안내 -->
+      <div class="copy-link-box">
+        <p>📎 카톡/인스타에서 보고 계시다면?</p>
+        <button class="copy-link-btn" onclick="copyPageLink()">
+          <span>🔗 링크 복사해서 Safari/Chrome에서 열기</span>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <div class="footer">
+    <div class="warning">
+      <span>⚠️</span>
+      <span>본 서비스는 합법적인 과일 배송입니다 (아마도)</span>
+    </div>
+    <p>© 2025 서리배송 | 야밤에 과일 도둑</p>
+  </div>
+
+  <!-- 성공 모달 -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">🥷</div>
+      <div class="modal-title">작전 접수 완료!</div>
+      <div class="modal-message">서리 작전이 성공적으로 등록되었습니다</div>
+      <div class="modal-order-id">
+        <span>작전 코드</span>
+        <span id="orderIdDisplay">SR20250117-001</span>
+      </div>
+      
+      <!-- 주문 정보 -->
+      <div class="order-summary">
+        <div class="order-summary-title">📦 서리 목록</div>
+        <div class="modal-order-items" id="modalOrderItems">
+          <!-- 주문 아이템들이 여기에 렌더링됨 -->
+        </div>
+        <div class="order-total">
+          <span>총 금액</span>
+          <span class="order-price" id="orderPrice">0원</span>
+        </div>
+      </div>
+      
+      <!-- 결제 정보 -->
+      <div class="payment-section">
+        <div class="payment-title">💰 작전 자금 입금</div>
+        
+        <div class="payment-method">
+          <div class="payment-label">
+            <span class="payment-icon">🏦</span>
+            <span>카카오뱅크</span>
+          </div>
+          <div class="payment-account" onclick="copyAccount('3333-03-9237131')">
+            <span id="accountNumber">3333-03-9237131</span>
+            <span class="copy-btn">복사</span>
+          </div>
+        </div>
+        
+        <div class="payment-divider">
+          <span>또는</span>
+        </div>
+        
+        <a href="https://qr.kakaopay.com/FE9VXsnUf" target="_blank" class="kakaopay-btn full">
+          <span class="pay-icon">💛</span>
+          <span>카카오페이로 송금하기</span>
+        </a>
+        
+        <div class="payment-notice">
+          입금 확인 후 서리 작전이 시작됩니다 🌙
+        </div>
+      </div>
+      
+      <button class="modal-btn" onclick="closeModal()">확인 (증거 인멸)</button>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // 🔧 설정 - Apps Script 배포 URL로 변경하세요!
+    // ==========================================
+    var API_URL = 'https://script.google.com/macros/s/AKfycbxlK0pYJ5uOriUUig4g90TOxERVG-WNVsdzo-75CPhiyBUy9gcTnenuqgklj9XV_bM/exec';
+    
+    // ==========================================
+    // 목표물 데이터 (가격 포함)
+    // ==========================================
+    var targets = [
+      { id: "strawberry", name: "새빨간딸기", unit: "500g", emoji: "🍓", price: 9900, desc: "들키기 쉬운 빨간 증거" },
+      { id: "shine", name: "샤인머스캣", unit: "2송이", emoji: "🍇", price: 9900, desc: "달콤한 황금빛 유혹" }
+    ];
+    
+    // 장바구니 (여러 과일 담기)
+    var cart = [];
+    
+    // ==========================================
+    // 초기화
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', function() {
+      createStars();
+      renderTargets();
+      setupForm();
+    });
+    
+    // ==========================================
+    // 별 생성
+    // ==========================================
+    function createStars() {
+      var container = document.getElementById('stars');
+      var starCount = 80;
+      
+      for (var i = 0; i < starCount; i++) {
+        var star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 2 + 's';
+        star.style.opacity = Math.random() * 0.7 + 0.3;
+        
+        if (Math.random() > 0.7) {
+          star.style.width = '3px';
+          star.style.height = '3px';
+        }
+        
+        container.appendChild(star);
+      }
+    }
+    
+    // ==========================================
+    // 목표물 렌더링
+    // ==========================================
+    function renderTargets() {
+      var grid = document.getElementById('targetGrid');
+      var html = '';
+      
+      for (var i = 0; i < targets.length; i++) {
+        var t = targets[i];
+        html += '<div class="target-item" data-id="' + t.id + '" onclick="selectTarget(\'' + t.id + '\')">';
+        html += '<span class="emoji">' + t.emoji + '</span>';
+        html += '<div class="info">';
+        html += '<div class="name">' + t.name + '<span class="unit">' + t.unit + '</span></div>';
+        html += '<div class="desc">' + t.desc + '</div>';
+        html += '</div>';
+        html += '</div>';
+      }
+      
+      grid.innerHTML = html;
+    }
+    
+    // ==========================================
+    // 목표물 선택 (장바구니에 추가)
+    // ==========================================
+    function selectTarget(targetId) {
+      // 선택된 과일 찾기
+      var target = null;
+      for (var j = 0; j < targets.length; j++) {
+        if (targets[j].id === targetId) {
+          target = targets[j];
+          break;
+        }
+      }
+      
+      if (!target) return;
+      
+      // 이미 장바구니에 있는지 확인
+      var existingIndex = -1;
+      for (var i = 0; i < cart.length; i++) {
+        if (cart[i].id === targetId) {
+          existingIndex = i;
+          break;
+        }
+      }
+      
+      if (existingIndex >= 0) {
+        // 이미 있으면 수량 증가
+        cart[existingIndex].qty += 1;
+      } else {
+        // 없으면 새로 추가
+        cart.push({
+          id: target.id,
+          name: target.name,
+          unit: target.unit,
+          emoji: target.emoji,
+          price: target.price,
+          qty: 1
+        });
+      }
+      
+      updateCartUI();
+    }
+    
+    // ==========================================
+    // 장바구니 UI 업데이트
+    // ==========================================
+    function updateCartUI() {
+      var summary = document.getElementById('lootSummary');
+      
+      if (cart.length === 0) {
+        summary.classList.remove('active');
+        return;
+      }
+      
+      summary.classList.add('active');
+      
+      // 장바구니 아이템 HTML 생성
+      var cartHTML = '';
+      var totalPrice = 0;
+      
+      for (var i = 0; i < cart.length; i++) {
+        var item = cart[i];
+        var itemTotal = item.price * item.qty;
+        totalPrice += itemTotal;
+        
+        cartHTML += '<div class="cart-item">';
+        cartHTML += '<div class="cart-item-info">';
+        cartHTML += '<span class="cart-emoji">' + item.emoji + '</span>';
+        cartHTML += '<span class="cart-name">' + item.name + '<span class="unit">' + item.unit + '</span></span>';
+        cartHTML += '</div>';
+        cartHTML += '<div class="cart-item-controls">';
+        cartHTML += '<button type="button" class="qty-btn small" onclick="changeCartQty(\'' + item.id + '\', -1)">−</button>';
+        cartHTML += '<span class="cart-qty">' + item.qty + '</span>';
+        cartHTML += '<button type="button" class="qty-btn small" onclick="changeCartQty(\'' + item.id + '\', 1)">+</button>';
+        cartHTML += '<span class="cart-item-price">' + itemTotal.toLocaleString() + '원</span>';
+        cartHTML += '</div>';
+        cartHTML += '</div>';
+      }
+      
+      document.getElementById('cartItems').innerHTML = cartHTML;
+      document.getElementById('totalPrice').textContent = totalPrice.toLocaleString() + '원';
+      
+      // 선택된 과일 하이라이트
+      var items = document.querySelectorAll('.target-item');
+      for (var j = 0; j < items.length; j++) {
+        var itemId = items[j].dataset.id;
+        var inCart = false;
+        for (var k = 0; k < cart.length; k++) {
+          if (cart[k].id === itemId) {
+            inCart = true;
+            break;
+          }
+        }
+        if (inCart) {
+          items[j].classList.add('selected');
+        } else {
+          items[j].classList.remove('selected');
+        }
+      }
+    }
+    
+    // ==========================================
+    // 장바구니 수량 변경
+    // ==========================================
+    function changeCartQty(itemId, delta) {
+      for (var i = 0; i < cart.length; i++) {
+        if (cart[i].id === itemId) {
+          cart[i].qty += delta;
+          if (cart[i].qty <= 0) {
+            cart.splice(i, 1); // 장바구니에서 제거
+          }
+          break;
+        }
+      }
+      updateCartUI();
+    }
+    
+    // ==========================================
+    // 장바구니 비우기
+    // ==========================================
+    function clearCart() {
+      cart = [];
+      updateCartUI();
+    }
+    
+    // ==========================================
+    // 폼 설정
+    // ==========================================
+    function setupForm() {
+      var form = document.getElementById('orderForm');
+      
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitOrder();
+      });
+      
+      // 전화번호 포맷
+      var phoneInput = document.getElementById('phone');
+      phoneInput.addEventListener('input', function(e) {
+        var val = e.target.value.replace(/[^0-9]/g, '');
+        if (val.length > 3 && val.length <= 7) {
+          val = val.slice(0, 3) + '-' + val.slice(3);
+        } else if (val.length > 7) {
+          val = val.slice(0, 3) + '-' + val.slice(3, 7) + '-' + val.slice(7, 11);
+        }
+        e.target.value = val;
+      });
+    }
+    
+    // ==========================================
+    // 주문 제출
+    // ==========================================
+    function submitOrder() {
+      if (cart.length === 0) {
+        alert('🎯 서리할 과일을 선택하세요!');
+        return;
+      }
+      
+      var name = document.getElementById('name').value.trim();
+      var phone = document.getElementById('phone').value.trim();
+      var addressDetail = document.getElementById('addressDetail').value.trim();
+      var request = document.getElementById('request').value.trim();
+      
+      // 고정 주소
+      var address = '대전 한빛아파트';
+      
+      if (!name || !phone || !addressDetail) {
+        alert('🤝 꽁범 정보와 동/호수는 필수입니다!');
+        return;
+      }
+      
+      var btn = document.getElementById('submitBtn');
+      btn.classList.add('loading');
+      btn.disabled = true;
+      
+      // 장바구니 내용을 문자열로 변환
+      var fruitList = [];
+      var totalQty = 0;
+      var totalPrice = 0;
+      
+      for (var i = 0; i < cart.length; i++) {
+        fruitList.push(cart[i].name + ' ' + cart[i].unit + ' x' + cart[i].qty);
+        totalQty += cart[i].qty;
+        totalPrice += cart[i].price * cart[i].qty;
+      }
+      
+      var orderData = {
+        name: name,
+        phone: phone,
+        address: address,
+        addressDetail: addressDetail,
+        fruit: fruitList.join(', '),
+        quantity: totalQty,
+        price: totalPrice,
+        request: request
+      };
+      
+      // 모달용 장바구니 복사 (resetForm 전에)
+      var cartCopy = JSON.parse(JSON.stringify(cart));
+      var totalPriceCopy = totalPrice;
+      
+      var callbackName = 'seoriCallback_' + Date.now();
+      
+      window[callbackName] = function(result) {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        
+        var scriptTag = document.getElementById('orderScript');
+        if (scriptTag) scriptTag.remove();
+        delete window[callbackName];
+        
+        if (result && result.success) {
+          // 작전 코드 표시
+          document.getElementById('orderIdDisplay').textContent = result.orderId;
+          
+          // 주문 정보 표시 (여러 과일)
+          var orderItemsHTML = '';
+          for (var i = 0; i < cartCopy.length; i++) {
+            var item = cartCopy[i];
+            orderItemsHTML += '<div class="modal-order-item">';
+            orderItemsHTML += '<span>' + item.emoji + ' ' + item.name + '<span class="unit">' + item.unit + '</span></span>';
+            orderItemsHTML += '<span>x ' + item.qty + '개</span>';
+            orderItemsHTML += '</div>';
+          }
+          document.getElementById('modalOrderItems').innerHTML = orderItemsHTML;
+          document.getElementById('orderPrice').textContent = totalPriceCopy.toLocaleString() + '원';
+          
+          // 모달 열기
+          var modal = document.getElementById('successModal');
+          modal.classList.add('active');
+          modal.scrollTop = 0;
+          document.body.style.overflow = 'hidden';
+          
+          resetForm();
+        } else {
+          alert(result && result.error ? result.error : '작전 실패... 다시 시도하세요!');
+        }
+      };
+      
+      var params = [];
+      for (var key in orderData) {
+        params.push(encodeURIComponent(key) + '=' + encodeURIComponent(orderData[key]));
+      }
+      params.push('callback=' + callbackName);
+      
+      var script = document.createElement('script');
+      script.id = 'orderScript';
+      script.src = API_URL + '?' + params.join('&');
+      
+      script.onerror = function() {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        delete window[callbackName];
+        alert('🚨 서버 연결 실패! 경비원한테 들켰나...?');
+      };
+      
+      document.body.appendChild(script);
+    }
+    
+    // ==========================================
+    // 폼 초기화
+    // ==========================================
+    function resetForm() {
+      document.getElementById('orderForm').reset();
+      cart = [];
+      
+      var items = document.querySelectorAll('.target-item');
+      for (var i = 0; i < items.length; i++) {
+        items[i].classList.remove('selected');
+      }
+      
+      document.getElementById('lootSummary').classList.remove('active');
+    }
+    
+    // ==========================================
+    // 모달 닫기
+    // ==========================================
+    function closeModal() {
+      document.getElementById('successModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    // ==========================================
+    // 홈 화면 추가 가이드 토글
+    // ==========================================
+    function toggleInstallGuide() {
+      var content = document.getElementById('installContent');
+      var arrow = document.getElementById('installArrow');
+      
+      content.classList.toggle('open');
+      arrow.classList.toggle('open');
+    }
+    
+    // ==========================================
+    // 계좌번호 복사
+    // ==========================================
+    function copyAccount(account) {
+      var tempInput = document.createElement('input');
+      tempInput.value = account.replace(/-/g, '');
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      
+      // 복사 완료 피드백
+      var copyBtn = document.querySelector('.copy-btn');
+      var originalText = copyBtn.textContent;
+      copyBtn.textContent = '복사됨!';
+      copyBtn.style.background = 'rgba(255, 215, 0, 0.3)';
+      copyBtn.style.color = '#ffd700';
+      
+      setTimeout(function() {
+        copyBtn.textContent = originalText;
+        copyBtn.style.background = 'rgba(0, 217, 192, 0.15)';
+        copyBtn.style.color = '#00d9c0';
+      }, 2000);
+    }
+    
+    // ==========================================
+    // 페이지 링크 복사
+    // ==========================================
+    function copyPageLink() {
+      var tempInput = document.createElement('input');
+      tempInput.value = window.location.href;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      
+      // 복사 완료 피드백
+      var btn = document.querySelector('.copy-link-btn');
+      var originalHTML = btn.innerHTML;
+      btn.innerHTML = '<span>✅ 링크가 복사되었어요! Safari/Chrome에 붙여넣기 하세요</span>';
+      btn.style.background = 'rgba(255, 215, 0, 0.2)';
+      btn.style.borderStyle = 'solid';
+      
+      setTimeout(function() {
+        btn.innerHTML = originalHTML;
+        btn.style.background = 'var(--bg-card)';
+        btn.style.borderStyle = 'dashed';
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
