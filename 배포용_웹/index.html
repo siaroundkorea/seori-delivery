@@ -662,36 +662,87 @@
     }
     
     /* 🔍 주문 조회 */
-    .search-section {
-      margin-top: 8px;
-    }
-    
-    .search-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+    .search-toggle-btn {
       width: 100%;
-      padding: 14px;
-      background: var(--bg-card);
-      border: 1px dashed rgba(255, 215, 0, 0.3);
-      border-radius: 14px;
-      color: var(--text-secondary);
-      font-size: 14px;
+      padding: 18px;
+      margin-top: 12px;
+      background: transparent;
+      border: 2px solid var(--accent-gold);
+      border-radius: 16px;
+      color: var(--accent-gold);
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 18px;
       cursor: pointer;
       transition: all 0.3s;
-      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
     }
     
-    .search-toggle:hover {
-      border-color: var(--accent-gold);
-      color: var(--accent-moon);
-      background: rgba(255, 215, 0, 0.05);
+    .search-toggle-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .search-toggle-btn:hover::before {
+      left: 100%;
+    }
+    
+    .search-toggle-btn:hover {
+      background: rgba(255, 215, 0, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.2);
+    }
+    
+    .chat-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      margin-top: 12px;
+      background: transparent;
+      border: 2px solid var(--accent-gold);
+      border-radius: 16px;
+      color: var(--accent-gold);
+      font-family: 'Black Han Sans', sans-serif;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      text-align: center;
+    }
+    
+    .chat-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+      transition: left 0.5s;
+    }
+    
+    .chat-btn:hover::before {
+      left: 100%;
+    }
+    
+    .chat-btn:hover {
+      background: rgba(255, 215, 0, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.2);
     }
     
     .search-panel {
       display: none;
       animation: slideIn 0.3s ease;
+      margin-top: 16px;
     }
     
     .search-panel.open {
@@ -1632,29 +1683,15 @@
         <button type="submit" class="submit-btn" id="submitBtn">
           🌙 서리 작전 개시
         </button>
+        <button type="button" class="search-toggle-btn" onclick="toggleSearch()">
+          🔍 내 서리 현황 확인
+        </button>
+        <a href="https://pf.kakao.com/_rhdAX" target="_blank" class="chat-btn">
+          💬 야과도와 소통하기
+        </a>
       </div>
       
-      <!-- 오늘의 과일 테스트 배너 -->
-      <a href="https://fruit-test.pages.dev" target="_blank" class="test-banner">
-        <div class="test-banner-content">
-          <span class="test-icon">🧪</span>
-          <div class="test-text">
-            <span class="test-title">오늘의 과일 테스트</span>
-            <span class="test-desc">나의 상태로 알아보는 과일 처방전</span>
-          </div>
-          <span class="test-arrow">→</span>
-        </div>
-      </a>
-      
-    </form>
-    
-    <!-- 🔍 서리 작전 조회 -->
-    <div class="search-section">
-      <button class="search-toggle" onclick="toggleSearch()">
-        <span>🔍</span>
-        <span>내 서리 현황 확인하기</span>
-      </button>
-      
+      <!-- 🔍 서리 작전 조회 -->
       <div class="search-panel" id="searchPanel">
         <div class="section">
           <div class="section-title">
@@ -1670,7 +1707,20 @@
           <div class="search-results" id="searchResults"></div>
         </div>
       </div>
-    </div>
+      
+      <!-- 심심할때 과일 테스트 배너 -->
+      <a href="https://fruit-test.pages.dev" target="_blank" class="test-banner">
+        <div class="test-banner-content">
+          <span class="test-icon">🧪</span>
+          <div class="test-text">
+            <span class="test-title">심심할때 하는 과일 테스트</span>
+            <span class="test-desc">나의 상태로 알아보는 과일 처방전</span>
+          </div>
+          <span class="test-arrow">→</span>
+        </div>
+      </a>
+      
+    </form>
   </div>
   
   <!-- 홈 화면 추가 가이드 -->
